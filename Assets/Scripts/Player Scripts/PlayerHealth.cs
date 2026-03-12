@@ -8,7 +8,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private TMP_Text healthText;
     [SerializeField] private TMP_Text coinText;
 
-    private float health;
+    public float health;
     private GameManager gameManager;
     private Player player;
 
@@ -28,10 +28,10 @@ public class PlayerHealth : MonoBehaviour
 
         UpdateUI();
 
-        if (health <= 0)
-        {
-            Die();
-        }
+        // if (health <= 0)
+        // {
+        //     Die();
+        // }
     }
 
     public void Die()

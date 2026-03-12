@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Player : MonoBehaviour
 {
@@ -14,18 +15,23 @@ public class Player : MonoBehaviour
     private bool isGrounded;
     private float horizontalInput;
     private PlayerHealth playerHealth;
+    private SpriteRenderer spriteRenderer;
+    private PlayerAnimator playerAnimator;
+    private bool isMoving;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         playerHealth = GetComponent<PlayerHealth>();
         if (playerHealth == null) Debug.LogError("playerHealth = null");
+        playerAnimator = GetComponent<PlayerAnimator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
-        isGrounded = Physics2D.Raycast((Vector2)transform.position + Vector2.down * 0.1f, Vector2.down, 0.7f, groundLayer);
+        isGrounded = Physics2D.Raycast((Vector2)transform.position + Vector2.down * 0.1f, Vector2.down, 1f, groundLayer);
 
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
@@ -38,13 +44,16 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         rb.velocity = new Vector2(horizontalInput * speed, rb.velocity.y);
+        Move();
+        JumpAnimation();
+        Attack();
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.color = Color.red;
-        Gizmos.DrawRay((Vector2)transform.position + Vector2.down * 0.1f, Vector2.down * 0.7f);
+        Gizmos.DrawRay((Vector2)transform.position + Vector2.down * 0.1f, Vector2.down * 1f);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -68,6 +77,56 @@ public class Player : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Water"))
         {
             playerHealth.Die();
+        }
+    }
+
+    private void Move()
+    {
+        isMoving = horizontalInput != 0 ? true : false;
+
+        if (horizontalInput > 0)
+        {
+            spriteRenderer.flipX = false;
+        }
+        else if (horizontalInput < 0)
+        {
+            spriteRenderer.flipX = true;
+        }
+
+        playerAnimator.IsMoving = isMoving;
+
+    }
+
+    private void JumpAnimation()
+    {
+        if (isGrounded != true)
+        {
+            playerAnimator.IsJumping = true;
+        }
+        else if (isGrounded == true)
+        {
+            playerAnimator.IsJumping = false;
+        }
+        else if (isGrounded != true && rb.velocity.y < -0.1f)
+        {
+            playerAnimator.IsJumping = false;
+            playerAnimator.IsJumpingToFall = true;
+        }
+        else if (isGrounded == true)
+        {
+            playerAnimator.IsJumpingToFall = false;
+        }
+
+
+    }
+    int i = 0;
+    private void Attack()
+    {
+
+        if (i < 5)
+        {
+            playerAnimator.Attack = true;
+            i++;
         }
     }
 }
