@@ -18,6 +18,10 @@ public class Player : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private PlayerAnimator playerAnimator;
     private bool isMoving;
+    public Transform attackPoint;
+    public float attackRange = 1f;
+    public LayerMask enemyLayers;
+
 
     private void Awake()
     {
@@ -39,21 +43,35 @@ public class Player : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, 0f);
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            playerAnimator.PlayAttack();
+        }
+
+
+
+        Move();
+        JumpAnimation();
     }
 
     private void FixedUpdate()
     {
+        if (playerAnimator.IsInState("Attack"))
+        {
+            rb.velocity = new Vector2(0, rb.velocity.y);
+            return;
+        }
         rb.velocity = new Vector2(horizontalInput * speed, rb.velocity.y);
-        Move();
-        JumpAnimation();
-        Attack();
     }
+
+
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.color = Color.red;
         Gizmos.DrawRay((Vector2)transform.position + Vector2.down * 0.1f, Vector2.down * 1f);
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -99,34 +117,34 @@ public class Player : MonoBehaviour
 
     private void JumpAnimation()
     {
-        if (isGrounded != true)
+        if (isGrounded == false)
         {
             playerAnimator.IsJumping = true;
         }
-        else if (isGrounded == true)
+        else
         {
             playerAnimator.IsJumping = false;
         }
-        else if (isGrounded != true && rb.velocity.y < -0.1f)
-        {
-            playerAnimator.IsJumping = false;
-            playerAnimator.IsJumpingToFall = true;
-        }
-        else if (isGrounded == true)
-        {
-            playerAnimator.IsJumpingToFall = false;
-        }
-
-
     }
-    int i = 0;
-    private void Attack()
-    {
 
-        if (i < 5)
+    /// Attack logic
+    public void Attack()
+    {
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+        foreach (Collider2D enemy in hitEnemies)
         {
-            playerAnimator.Attack = true;
-            i++;
+            if (enemy != null)
+            {
+                FirstEnemy enemyScript = enemy.GetComponent<FirstEnemy>();
+                if (enemyScript != null)
+                {
+                    enemyScript.enemyTakeDamage(damage);
+                }
+                else
+                {
+                    Debug.LogError("enemyScript = null");
+                }
+            }
         }
     }
 }

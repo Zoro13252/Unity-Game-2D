@@ -28,10 +28,10 @@ public class PlayerHealth : MonoBehaviour
 
         UpdateUI();
 
-        // if (health <= 0)
-        // {
-        //     Die();
-        // }
+        if (health <= 0)
+        {
+            Die();
+        }
     }
 
     public void Die()

@@ -1,26 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour
 {
     private Animator animator;
-    public bool IsMoving { private get; set; }
-    public bool IsJumping { private get; set; }
-    public bool IsJumpingToFall { private get; set; }
-    public bool Attack { private get; set; }
+
+    public bool IsMoving { get; set; }
+    public bool IsJumping { get; set; }
+
 
     void Awake()
     {
         animator = GetComponent<Animator>();
     }
 
-
     void FixedUpdate()
     {
         animator.SetBool("IsMoving", IsMoving);
         animator.SetBool("IsJumping", IsJumping);
-        animator.SetBool("IsJumpingToFall", IsJumpingToFall);
-        animator.SetBool("Attack", Attack);
     }
+
+
+    public void PlayAttack()
+    {
+        animator.SetTrigger("Attack");
+    }
+
+
+    public bool IsAttacking()
+    {
+        return animator.GetCurrentAnimatorStateInfo(0).IsName("Attack");
+    }
+
+    public bool IsInState(string stateName)
+    {
+        return animator.GetCurrentAnimatorStateInfo(0).IsName(stateName);
+    }
+
 }
