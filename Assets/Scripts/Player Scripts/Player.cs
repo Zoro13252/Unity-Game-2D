@@ -8,6 +8,11 @@ public class Player : MonoBehaviour
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float damage = 1f;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private float attackRate = 1f;
+    private float nextAttackTime = 0f;
+    public Transform attackPoint;
+    public float attackRange = 1f;
+    public LayerMask enemyLayers;
 
     [Header("Coins")]
     public int coinCount = 0;
@@ -18,9 +23,6 @@ public class Player : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private PlayerAnimator playerAnimator;
     private bool isMoving;
-    public Transform attackPoint;
-    public float attackRange = 1f;
-    public LayerMask enemyLayers;
 
 
     private void Awake()
@@ -44,9 +46,10 @@ public class Player : MonoBehaviour
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && Time.time >= nextAttackTime)
         {
             playerAnimator.PlayAttack();
+            nextAttackTime = Time.time + attackRate;
         }
 
 
@@ -57,11 +60,11 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (playerAnimator.IsInState("Attack"))
-        {
-            rb.velocity = new Vector2(0, rb.velocity.y);
-            return;
-        }
+        // if (playerAnimator.IsInState("Attack"))
+        // {
+        //     rb.velocity = new Vector2(0, rb.velocity.y);
+        //     return;
+        // }
         rb.velocity = new Vector2(horizontalInput * speed, rb.velocity.y);
     }
 

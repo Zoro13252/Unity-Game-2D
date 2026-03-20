@@ -8,7 +8,7 @@ public class FirstEnemy : MonoBehaviour
     [SerializeField] private float maxHealth = 1f;
     [SerializeField] private float enemyDamage = 1f;
     [SerializeField] Transform[] Point = new Transform[2];
-    [SerializeField] private PlayerHealth playerHealth;   // ← сделай поле видимым в инспекторе
+    [SerializeField] private PlayerHealth playerHealth;
     public float currentHealth;
     Rigidbody2D rb;
     SpriteRenderer SprEnemy;
@@ -67,6 +67,9 @@ public class FirstEnemy : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
+
+
+
 
 }
 
