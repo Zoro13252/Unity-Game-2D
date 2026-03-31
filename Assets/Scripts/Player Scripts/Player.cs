@@ -79,14 +79,6 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy"))
-        {
-            FirstEnemy enemyScript = collision.GetComponent<FirstEnemy>();
-            if (enemyScript != null)
-            {
-                enemyScript.enemyTakeDamage(damage);
-            }
-        }
 
         if (collision.CompareTag("Coin"))
         {

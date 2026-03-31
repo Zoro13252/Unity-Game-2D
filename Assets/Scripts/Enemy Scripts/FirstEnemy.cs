@@ -1,28 +1,51 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class FirstEnemy : MonoBehaviour
 {
+    [Header("Base settings")]
     [SerializeField] private float speed = 10f;
     [SerializeField] private float maxHealth = 1f;
     [SerializeField] private float enemyDamage = 1f;
     [SerializeField] Transform[] Point = new Transform[2];
     [SerializeField] private PlayerHealth playerHealth;
-    public float currentHealth;
+    private float currentHealth;
     Rigidbody2D rb;
-    SpriteRenderer SprEnemy;
-    public CapsuleCollider2D capsule;
-
+    SpriteRenderer sprEnemy;
     private bool movingRight = true;
+    private EnemyAnimator enemyAnimator;
+
+    [Header("Attack settings")]
+    public Transform attackZone;
+    public float enemyAttackRange;
+    public LayerMask playerLayers;
+    public float inspectionZoneDiameter; //<-- search for a player within a certain radius
+    public Transform searchZone;
+
 
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        SprEnemy = GetComponent<SpriteRenderer>();
+        sprEnemy = GetComponent<SpriteRenderer>();
         currentHealth = maxHealth;
-        capsule = GetComponent<CapsuleCollider2D>();
+
+        enemyAnimator = GetComponent<EnemyAnimator>();
+
+        // ←←← Это очень важно!
+        if (enemyAnimator == null)
+        {
+            Debug.LogError($"[ERROR] На объекте {gameObject.name} отсутствует компонент EnemyAnimator! Добавь его.", this);
+        }
+
+        if (playerHealth == null)
+        {
+            playerHealth = FindObjectOfType<PlayerHealth>();
+            if (playerHealth == null)
+                Debug.LogWarning("PlayerHealth не найден на сцене!");
+        }
     }
 
     void FixedUpdate()
@@ -33,6 +56,7 @@ public class FirstEnemy : MonoBehaviour
             if (transform.position.x >= Point[1].position.x)
             {
                 movingRight = false;
+                sprEnemy.flipX = true;
             }
         }
         else
@@ -41,22 +65,14 @@ public class FirstEnemy : MonoBehaviour
             if (transform.position.x <= Point[0].position.x)
             {
                 movingRight = true;
+                sprEnemy.flipX = false;
             }
         }
+
+        PlayerSearch();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
 
-            if (playerHealth != null)
-            {
-                playerHealth.TakeDamage(enemyDamage);
-            }
-
-        }
-    }
 
 
     public void enemyTakeDamage(float damage)
@@ -68,9 +84,40 @@ public class FirstEnemy : MonoBehaviour
         }
     }
 
+    private void EnemyAttack()
+    {
+        if (playerHealth == null) return;
+        Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(attackZone.position, enemyAttackRange, playerLayers);
+        foreach (Collider2D item in hitPlayer)
+        {
+            if (item != null)
+            {
+                playerHealth.TakeDamage(enemyDamage);
+            }
+        }
+    }
 
 
+    private void PlayerSearch()
+    {
 
+        if (enemyAnimator == null)
+        {
+            Debug.LogError("EnemyAnimator is missing on " + gameObject.name);
+            return;
+        }
+
+        Collider2D playerInZone = Physics2D.OverlapCircle(searchZone.position, inspectionZoneDiameter, playerLayers);
+        bool playerFound = playerInZone != null;
+
+        enemyAnimator.IsAttacking = playerFound;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(attackZone.position, enemyAttackRange);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(searchZone.position, inspectionZoneDiameter);
+    }
 }
-
-
