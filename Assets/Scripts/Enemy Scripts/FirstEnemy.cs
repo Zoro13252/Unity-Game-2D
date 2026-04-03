@@ -111,6 +111,10 @@ public class FirstEnemy : MonoBehaviour
         bool playerFound = playerInZone != null;
 
         enemyAnimator.IsAttacking = playerFound;
+        if (playerFound)
+        {
+            speed = 0f;
+        }
     }
 
     private void OnDrawGizmosSelected()
