@@ -52,6 +52,10 @@ public class Player : MonoBehaviour
             nextAttackTime = Time.time + attackRate;
         }
 
+        if (playerHealth.health <= 0)
+        {
+            playerAnimator.PlayDeath();
+        }
 
 
         Move();

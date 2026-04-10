@@ -25,15 +25,20 @@ public class PlayerAnimator : MonoBehaviour
         animator.SetTrigger("Attack");
     }
 
-
-    public bool IsAttacking()
+    public void PlayDeath()
     {
-        return animator.GetCurrentAnimatorStateInfo(0).IsName("Attack");
+        animator.SetTrigger("IsDeathing");
     }
 
-    public bool IsInState(string stateName)
-    {
-        return animator.GetCurrentAnimatorStateInfo(0).IsName(stateName);
-    }
+
+    // public bool IsAttacking()
+    // {
+    //     return animator.GetCurrentAnimatorStateInfo(0).IsName("Attack");
+    // }
+
+    // public bool IsInState(string stateName)
+    // {
+    //     return animator.GetCurrentAnimatorStateInfo(0).IsName(stateName);
+    // }
 
 }

@@ -5,7 +5,8 @@ using UnityEngine;
 public class EnemyAnimator : MonoBehaviour
 {
     private Animator animator;
-    public bool IsAttacking {get; set;}
+    public bool IsAttacking { get; set; }
+    public bool IsRunning { get; set; }
 
     private void Awake()
     {
@@ -15,5 +16,6 @@ public class EnemyAnimator : MonoBehaviour
     void FixedUpdate()
     {
         animator.SetBool("IsAttacking", IsAttacking);
+        animator.SetBool("IsRunning", IsRunning);
     }
 }

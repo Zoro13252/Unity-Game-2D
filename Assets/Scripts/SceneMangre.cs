@@ -17,10 +17,10 @@ public class SceneMangre : MonoBehaviour
     }
     private void Update()
     {
-        if (playerHealth != null && playerHealth.health <= 0)
-        {
-            LoadScene(currentBuildIndex);
-        }
+        // if (playerHealth != null && playerHealth.health <= 0)
+        // {
+        //     LoadScene(currentBuildIndex);
+        // }
     }
     public void LoadScene(int sceneIndex)
     {

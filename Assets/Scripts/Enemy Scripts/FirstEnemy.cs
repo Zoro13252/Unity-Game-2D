@@ -23,6 +23,7 @@ public class FirstEnemy : MonoBehaviour
     public LayerMask playerLayers;
     public float inspectionZoneDiameter; //<-- search for a player within a certain radius
     public Transform searchZone;
+    public Transform player;
 
 
 
@@ -55,6 +56,7 @@ public class FirstEnemy : MonoBehaviour
             rb.velocity = new Vector2(speed, rb.velocity.y);
             if (transform.position.x >= Point[1].position.x)
             {
+                enemyAnimator.IsRunning = true;
                 movingRight = false;
                 sprEnemy.flipX = true;
             }
@@ -64,12 +66,14 @@ public class FirstEnemy : MonoBehaviour
             rb.velocity = new Vector2(-speed, rb.velocity.y);
             if (transform.position.x <= Point[0].position.x)
             {
+                enemyAnimator.IsRunning = true;
                 movingRight = true;
                 sprEnemy.flipX = false;
             }
         }
 
         PlayerSearch();
+        Agressiv();
     }
 
 
@@ -88,6 +92,7 @@ public class FirstEnemy : MonoBehaviour
     {
         if (playerHealth == null) return;
         Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(attackZone.position, enemyAttackRange, playerLayers);
+
         foreach (Collider2D item in hitPlayer)
         {
             if (item != null)
@@ -111,10 +116,6 @@ public class FirstEnemy : MonoBehaviour
         bool playerFound = playerInZone != null;
 
         enemyAnimator.IsAttacking = playerFound;
-        if (playerFound)
-        {
-            speed = 0f;
-        }
     }
 
     private void OnDrawGizmosSelected()
@@ -123,5 +124,10 @@ public class FirstEnemy : MonoBehaviour
         Gizmos.DrawWireSphere(attackZone.position, enemyAttackRange);
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(searchZone.position, inspectionZoneDiameter);
+    }
+
+    void Agressiv()
+    {
+
     }
 }

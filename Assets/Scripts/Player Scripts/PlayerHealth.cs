@@ -11,6 +11,7 @@ public class PlayerHealth : MonoBehaviour
     public float health;
     private GameManager gameManager;
     private Player player;
+    private PlayerAnimator playerAnimator;
 
     void Awake()
     {
@@ -28,10 +29,11 @@ public class PlayerHealth : MonoBehaviour
 
         UpdateUI();
 
-        if (health <= 0)
-        {
-            Die();
-        }
+        // if (health <= 0)
+        // {
+        //     Die();
+
+        // }
     }
 
     public void Die()
