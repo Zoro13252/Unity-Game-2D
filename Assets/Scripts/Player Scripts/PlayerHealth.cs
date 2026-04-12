@@ -45,6 +45,7 @@ public class PlayerHealth : MonoBehaviour
         }
 
         gameObject.SetActive(false);
+        // Time.timeScale = 0;
     }
 
     private void UpdateUI()
