@@ -11,6 +11,7 @@ public class FirstEnemy : MonoBehaviour
     [SerializeField] private float enemyDamage = 1f;
     [SerializeField] Transform[] Point = new Transform[2];
     [SerializeField] private PlayerHealth playerHealth;
+
     private float currentHealth;
     Rigidbody2D rb;
     SpriteRenderer sprEnemy;
@@ -24,6 +25,8 @@ public class FirstEnemy : MonoBehaviour
     public float inspectionZoneDiameter; //<-- search for a player within a certain radius
     public Transform searchZone;
     public Transform player;
+    [SerializeField] private float searchZoneDiameter = 2f;
+    [SerializeField] Transform pointForSearchZoneDiameter;
 
 
 
@@ -51,25 +54,31 @@ public class FirstEnemy : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (movingRight)
+        // if (movingRight)
+        // {
+        //     rb.velocity = new Vector2(speed, rb.velocity.y);
+        //     if (transform.position.x >= Point[1].position.x)
+        //     {
+        //         enemyAnimator.IsRunning = true;
+        //         movingRight = false;
+        //         sprEnemy.flipX = true;
+        //     }
+        // }
+        // else
+        // {
+        //     rb.velocity = new Vector2(-speed, rb.velocity.y);
+        //     if (transform.position.x <= Point[0].position.x)
+        //     {
+        //         enemyAnimator.IsRunning = true;
+        //         movingRight = true;
+        //         sprEnemy.flipX = false;
+        //     }
+        // }
+
+        float distance = Vector2.Distance(player.position, transform.position);
+        if (distance <= searchZoneDiameter)
         {
-            rb.velocity = new Vector2(speed, rb.velocity.y);
-            if (transform.position.x >= Point[1].position.x)
-            {
-                enemyAnimator.IsRunning = true;
-                movingRight = false;
-                sprEnemy.flipX = true;
-            }
-        }
-        else
-        {
-            rb.velocity = new Vector2(-speed, rb.velocity.y);
-            if (transform.position.x <= Point[0].position.x)
-            {
-                enemyAnimator.IsRunning = true;
-                movingRight = true;
-                sprEnemy.flipX = false;
-            }
+            transform.position = Vector3.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
         }
 
         PlayerSearch();
@@ -124,6 +133,8 @@ public class FirstEnemy : MonoBehaviour
         Gizmos.DrawWireSphere(attackZone.position, enemyAttackRange);
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(searchZone.position, inspectionZoneDiameter);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(pointForSearchZoneDiameter.position, searchZoneDiameter);
     }
 
     void Agressiv()
