@@ -7,6 +7,7 @@ public class StoneTablet : MonoBehaviour
 {
 
     [SerializeField] TextMeshPro textMesh;
+    [SerializeField] TextAnimation textAnimation;
 
     void Awake()
     {
@@ -15,15 +16,13 @@ public class StoneTablet : MonoBehaviour
             Debug.LogError("TextMesh не назначен в инспекторе на StoneTablet!", this);
             return;
         }
-
-        textMesh.enabled = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            textMesh.enabled = true;
+            textAnimation.StartAnimation();
         }
     }
 }
