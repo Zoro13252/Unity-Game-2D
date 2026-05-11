@@ -29,7 +29,7 @@ public class FirstEnemy : MonoBehaviour
 
 
 
-    void Awake()
+   void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         sprEnemy = GetComponent<SpriteRenderer>();
@@ -37,17 +37,20 @@ public class FirstEnemy : MonoBehaviour
 
         enemyAnimator = GetComponent<EnemyAnimator>();
 
-        // ←←← Это очень важно!
-        if (enemyAnimator == null)
+
+        if (playerHealth == null)
         {
-            Debug.LogError($"[ERROR] На объекте {gameObject.name} отсутствует компонент EnemyAnimator! Добавь его.", this);
+            playerHealth = FindObjectOfType<PlayerHealth>(); // находит на сцене
         }
 
         if (playerHealth == null)
         {
-            
-            if (playerHealth == null)
-                Debug.LogWarning("PlayerHealth не найден на сцене!");
+            Debug.LogError("PlayerHealth не найден на сцене! Добавь игрока на сцену.", this);
+        }
+
+        if (enemyAnimator == null)
+        {
+            Debug.LogError($"[ERROR] На объекте {gameObject.name} отсутствует компонент EnemyAnimator!", this);
         }
     }
 

@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     public LayerMask enemyLayers;
 
     [Header("Coins")]
-    public int coinCount = 0;
+    public int coinCount;
     private Rigidbody2D rb;
     private bool isGrounded;
     private float horizontalInput;
@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     private PlayerAnimator playerAnimator;
     private bool isMoving;
     private bool isAttacking = false;
+    private GameManager gameManager;
 
 
 
@@ -35,6 +36,8 @@ public class Player : MonoBehaviour
         if (playerHealth == null) Debug.LogError("playerHealth = null");
         playerAnimator = GetComponent<PlayerAnimator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        gameManager = GameManager.Instance;
+        coinCount = PlayerPrefs.GetInt("Coin");
     }
 
 private void Update()

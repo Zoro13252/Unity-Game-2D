@@ -29,23 +29,39 @@ public class PlayerHealth : MonoBehaviour
 
         UpdateUI();
 
-        // if (health <= 0)
-        // {
-        //     Die();
-
-        // }
+        if (health <= 0)
+        {
+            Die();
+        }
     }
 
     public void Die()
     {
+        // Защита от null
+        if (gameManager == null)
+        {
+            gameManager = GameManager.Instance;
+        }
+
         if (gameManager != null && player != null)
         {
-            gameManager.AddCoin(player.coinCount);
+            gameManager.SaveCoin(player.coinCount);
             Debug.Log($"Добавлено в GameManager: {player.coinCount} монет");
+        }
+        else
+        {
+            Debug.LogWarning("GameManager не найден! Монеты не сохранены.");
+            
+            // Альтернативное сохранение напрямую
+            if (player != null)
+            {
+                PlayerPrefs.SetInt("Coin", player.coinCount);
+                PlayerPrefs.Save();
+            }
         }
 
         gameObject.SetActive(false);
-        // Time.timeScale = 0;
+        // Time.timeScale = 0;  // раскомментируй, если нужно остановить игру
     }
 
     private void UpdateUI()
@@ -59,4 +75,10 @@ public class PlayerHealth : MonoBehaviour
         if (coinText != null && player != null)
             coinText.text = $"Coins: {player.coinCount}";
     }
+
+    public void AddHealth(float healthToAdd)
+    {
+        health += healthToAdd;
+    }
+
 }

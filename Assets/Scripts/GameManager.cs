@@ -5,20 +5,28 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    int coinCount = 0;
+
     private void Awake()
     {
         Instance = this;
     }
-    // public void Die()
-    // {
-    //     gameObject.SetActive(false);
-    // }
 
-    public void AddCoin(int coin)
+
+    public void SaveCoin(int coins)
     {
-        coinCount += coin;
+        PlayerPrefs.SetInt("Coin", coins);
     }
+
+    public int LoadCoin()
+    {
+        return PlayerPrefs.GetInt("Coin");
+    }
+
+
+    // public void AddCoin(int coin)
+    // {
+    //     coinCount += coin;
+    // }
 }
 
 
