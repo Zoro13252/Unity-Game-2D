@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private float speed = 5f;
     [SerializeField] private float jumpForce = 5f;
-    [SerializeField] private float damage = 1f;
+    [SerializeField] public float damage = 1f;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float attackRate = 1f;
     [SerializeField] private Transform teleportPoint;

@@ -4,17 +4,31 @@ using UnityEngine;
 public class Bonus : MonoBehaviour
 {
     [SerializeField] PlayerHealth playerHealth;
-    private string bonusName;
+    [SerializeField] Player player;
+    public string bonusName;
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            // switch (bonusName)
-            // {
-            //     // case "healthPotion":
-            //     //     playerHealth.AddHealth();
-            //     // break;
-            // }
+            switch (bonusName)
+            {
+                case "healthPotion":
+                    if(playerHealth.health >= 100)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        playerHealth.health += 15;
+                        playerHealth.UpdateUI();
+                        Destroy(gameObject);
+                    }
+                break;
+
+                case "attackPotion":
+                    player.damage += 3;
+                break;
+            }
         }
     }
 }

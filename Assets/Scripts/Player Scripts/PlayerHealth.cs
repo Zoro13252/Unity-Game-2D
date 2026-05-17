@@ -64,7 +64,7 @@ public class PlayerHealth : MonoBehaviour
         // Time.timeScale = 0;  // раскомментируй, если нужно остановить игру
     }
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
         if (healthText != null)
             healthText.text = $"HP: {Mathf.RoundToInt(health)}/{Mathf.RoundToInt(maxHealth)}";
@@ -75,10 +75,4 @@ public class PlayerHealth : MonoBehaviour
         if (coinText != null && player != null)
             coinText.text = $"Coins: {player.coinCount}";
     }
-
-    public void AddHealth(float healthToAdd)
-    {
-        health += healthToAdd;
-    }
-
 }
